@@ -1,0 +1,54 @@
+import random
+
+def get_random_puzzle():
+    puzzles = [
+        {"hint": "İçimi ısıtan bir şey...", "word": "sevgi"},
+        {"hint": "Gözlerine baktığımda gördüğüm şey...", "word": "mutluluk"},
+        {"hint": "Beraber yazdığımız en güzel hikaye...", "word": "aşk"},
+    ]
+    return random.choice(puzzles)
+
+def display_word(word, guessed_letters):
+    return " ".join([letter if letter in guessed_letters else "_" for letter in word])
+
+def play_game(predefined_guesses):
+    puzzle = get_random_puzzle()
+    word = puzzle["word"]
+    hint = puzzle["hint"]
+    guessed_letters = set()
+    attempts = 6
+    guess_index = 0
+    
+    print("💖 Romantik Şifre Çözme Oyunu 💖")
+    print(f"İpucu: {hint}")
+    
+    while attempts > 0 and guess_index < len(predefined_guesses):
+        print(f"\n{display_word(word, guessed_letters)}")
+        guess = predefined_guesses[guess_index].strip().lower()
+        guess_index += 1
+        print(f"Tahmin edilen harf: {guess}")
+        
+        if len(guess) != 1 or not guess.isalpha():
+            print("Lütfen sadece bir harf gir!")
+            continue
+        
+        if guess in guessed_letters:
+            print("Bu harfi zaten tahmin ettin!")
+            continue
+        
+        guessed_letters.add(guess)
+        
+        if guess not in word:
+            attempts -= 1
+            print(f"Yanlış tahmin! Kalan hak: {attempts}")
+        
+        if all(letter in guessed_letters for letter in word):
+            print(f"\nTebrikler! Şifreyi çözdün: {word.upper()} 💕")
+            return
+    
+    print(f"Üzgünüm, hakkın bitti! Doğru kelime: {word.upper()}")
+
+if __name__ == "__main__":
+    # Test amaçlı tahminleri buraya yazabilirsin
+    test_guesses = ["s", "e", "v", "g", "i"]
+    play_game(test_guesses)
